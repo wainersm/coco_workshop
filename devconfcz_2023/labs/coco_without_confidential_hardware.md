@@ -257,6 +257,7 @@ $ kubectl delete -f coco-demo.yaml
 2. Delete the custom runtime
 
 ```shell
+$ kubectl delete -f https://raw.githubusercontent.com/confidential-containers/operator/v0.2.0/config/samples/ccruntime-ssh-demo.yaml
 ```
 
 3. Wait for all pods (except the controller) on `confidential-containers-system` namespace terminate
