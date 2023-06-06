@@ -29,6 +29,7 @@ trap on_exit EXIT
 
 main() {
 	check_reqs
+	ansible-galaxy collection install community.docker
 	workdir="$(mktemp -d)"
 	pushd "$workdir"
 	git clone https://github.com/confidential-containers/operator
