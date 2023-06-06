@@ -39,9 +39,9 @@ main() {
 	info "start kubernetes"
 	sudo -E PATH="$PATH" bash -c './cluster/up.sh'
 	popd
-    mkdir -p "$HOME/.kube"
-    sudo cp -i /etc/kubernetes/admin.conf "$HOME/.kube/config"
-    sudo chown "$(id -u):$(id -g)" "$HOME/.kube/config"
+	mkdir -p "$HOME/.kube"
+	sudo cp -i /etc/kubernetes/admin.conf "$HOME/.kube/config"
+	sudo chown "$(id -u):$(id -g)" "$HOME/.kube/config"
 	popd
 	info "installation successful"
 }
