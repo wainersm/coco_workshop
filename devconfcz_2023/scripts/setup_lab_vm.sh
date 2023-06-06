@@ -67,7 +67,7 @@ main() {
 	kcli create vm -i centos8stream -P numcpus=4 -P memory=$((1024*8)) -P disks=[30] "${vm_name}"
 	kcli start vm "${vm_name}"
 
-	info "Wait the VM to get an IP address"
+	info "Wait for the VM to get an IP address"
 	local ip
 	wait_for_ip
 	user=$(kcli info vm "${vm_name}" -f user -v)
