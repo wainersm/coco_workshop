@@ -80,7 +80,9 @@ main() {
 	kcli scp -r "${script_dir}/setup_lab_env.sh" "${vm_name}:~/setup_lab_env.sh"
 	kcli ssh ${vm_name} "bash -c './setup_lab_env.sh'"
 
-	info "Installation succeeded. Use the 'kcli ssh ${vm_name}' command to connect to the VM"
+	info "Installation of VM ${vm_name} succeeded."
+        info "Use the following commmand to connect to the VM:"
+        echo "     kcli ssh ${vm_name}"
 }
 
 main "$@"
