@@ -41,7 +41,7 @@ wait_for_ip() {
 			error "Timeout: unabled to get the IP address"
 		fi
 		info "Checking after $((now - timer_start)) seconds"
-		ip=$(kcli info vm "${vm_name}" -f ip -v)	
+		ip=$(kcli info vm "${vm_name}" -f ip -v)
 	done
 }
 
