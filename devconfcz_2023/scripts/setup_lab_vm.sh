@@ -63,7 +63,7 @@ main() {
 		kcli delete -y vm ${vm_name}
 	fi
 
-	info "Create and start the VM"
+	info "Create and start the ${vm_name} Centos8 VM"
 	kcli create vm -i centos8stream -P numcpus=4 -P memory=$((1024*8)) -P disks=[30] "${vm_name}"
 	kcli start vm "${vm_name}"
 
