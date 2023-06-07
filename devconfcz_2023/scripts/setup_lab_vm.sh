@@ -73,24 +73,19 @@ main() {
 	wait_for_ip
 	user=$(kcli info vm "${vm_name}" -f user -v)
 
-	if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-	    "${user}"@"${ip}" "echo OK" ; then
+	if ! kcli ssh "${user}"@"${vm_name}" "echo OK" ; then
 		user=root
-		ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		    "${user}"@"${ip}" "echo OK"
+		kcli ssh "${user}"@"${vm_name}" "echo OK"
 	fi
 
 	info "Install software requirements"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core' || bash -c 'sudo apt update && sudo apt install -y git ansible'"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c 'ansible-galaxy collection install community.docker'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core' || bash -c 'sudo apt update && sudo apt install -y git ansible'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c 'ansible-galaxy collection install community.docker'"
 
 	info "Setup the lab environment"
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 		-r "${script_dir}/setup_lab_env.sh" "${user}@${ip}:~/setup_lab_env.sh"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c './setup_lab_env.sh'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c './setup_lab_env.sh'"
 
 	info "Installation of VM ${vm_name} succeeded."
         info "Use the following commmand to connect to the VM:"
