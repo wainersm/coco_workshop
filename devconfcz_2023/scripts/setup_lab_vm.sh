@@ -43,6 +43,7 @@ wait_for_ip() {
 		info "Checking after $((now - timer_start)) seconds"
 		ip=$(kcli info vm "${vm_name}" -f ip -v)
 	done
+        sleep 1
 }
 
 main() {
