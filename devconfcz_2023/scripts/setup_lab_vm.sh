@@ -64,7 +64,7 @@ main() {
 	fi
 
 	info "Create and start the ${vm_name} Centos8 VM"
-	kcli create vm -i centos8stream -P numcpus=4 -P memory=$((1024*8)) -P disks=[30] "${vm_name}"
+	kcli create vm -i centos8stream -P numcpus=4 -P memory=8G -P disks=[30] "${vm_name}"
 	kcli start vm "${vm_name}"
 
 	info "Wait for the VM to get an IP address"
