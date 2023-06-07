@@ -75,6 +75,8 @@ main() {
 
 	info "Install software requirements"
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		"${user}"@"${ip}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core' || bash -c 'sudo apt update && sudo apt install -y git ansible'"
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 		"${user}"@"${ip}" "bash -c 'ansible-galaxy collection install community.docker'"
 
 	info "Setup the lab environment"
