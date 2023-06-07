@@ -74,11 +74,14 @@ main() {
 	user=$(kcli info vm "${vm_name}" -f user -v)
 
 	info "Install software requirements"
-	kcli ssh ${vm_name} "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core'"
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		"${user}"@"${ip}" "bash -c 'ansible-galaxy collection install community.docker'"
 
 	info "Setup the lab environment"
-	kcli scp -r "${script_dir}/setup_lab_env.sh" "${vm_name}:~/setup_lab_env.sh"
-	kcli ssh ${vm_name} "bash -c './setup_lab_env.sh'"
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		-r "${script_dir}/setup_lab_env.sh" "${user}@${ip}:~/setup_lab_env.sh"
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		"${user}"@"${ip}" "bash -c './setup_lab_env.sh'"
 
 	info "Installation of VM ${vm_name} succeeded."
         info "Use the following commmand to connect to the VM:"
