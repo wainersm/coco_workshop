@@ -3,12 +3,8 @@
 set -e
 
 check_reqs() {
-	if ! command -v git >/dev/null; then
-		error "you must have 'git' installed"
-	fi
-
-	if ! command -v ansible >/dev/null; then
-		error "you must have 'ansible' installed"
+	if ! ( command -v git && command -v ansible-galaxy ) >/dev/null; then
+		error "you must have 'git' and 'ansible-galaxy' installed"
 	fi
 }
 
