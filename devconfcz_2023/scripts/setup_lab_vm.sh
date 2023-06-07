@@ -73,6 +73,13 @@ main() {
 	wait_for_ip
 	user=$(kcli info vm "${vm_name}" -f user -v)
 
+	if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+	    "${user}"@"${ip}" "echo OK" ; then
+		user=root
+		ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		    "${user}"@"${ip}" "echo OK"
+	fi
+
 	info "Install software requirements"
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 		"${user}"@"${ip}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core' || bash -c 'sudo apt update && sudo apt install -y git ansible'"
