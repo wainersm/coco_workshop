@@ -25,10 +25,10 @@ In order to fully accomplish all activities of this lab you will need:
 - The system must have at least 8GB of memory and 4 CPUs
 - It must have installed Kubernetes version 1.24.0 or above, configured for the [containerd](https://containerd.io) container runtime
 
-However, we strongly recommend that you run this lab activities on a VM because some instructions will change your system's configuration. Therefpre, We provide scripts that you can use to easily setup the lab environment in two scenarios:
+However, we **strongly recommend** that you run this lab activities on a VM because some instructions will change your system's configuration. Therefpre, We provide scripts that you can use to easily setup the lab environment in two scenarios:
 
-- Bring up your own KVM VM matching the OS and system's requirements listed above, then run the [setup environment script](../scripts/setup_lab_env.sh) within the VM
 - (Recommended) Use the [setup VM script](../scripts/setup_lab_vm.sh) to create a fresh KVM VM and perform the setup for you, all in a single run. The only requirement is to have the [kcli](https://kcli.readthedocs.io) tool installed on your laptop.
+- Alternatively, bring up your own KVM VM matching the OS and system's requirements listed above, then run the [setup environment script](../scripts/setup_lab_env.sh) within the VM
 
 # Activities
 
@@ -44,7 +44,7 @@ You will install CoCo via [Kubernetes operator](https://kubernetes.io/docs/conce
 $ kubectl label node "$(hostname)" "node-role.kubernetes.io/worker="
 ```
 
-2. Disable SELinux enforce mode:
+2. Disable SELinux enforce mode (not necessary on Ubuntu):
 
 ```shell
 $ sudo setenforce 0

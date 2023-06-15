@@ -41,13 +41,15 @@ wait_for_ip() {
 			error "Timeout: unabled to get the IP address"
 		fi
 		info "Checking after $((now - timer_start)) seconds"
-		ip=$(kcli info vm "${vm_name}" -f ip -v)	
+		ip=$(kcli info vm "${vm_name}" -f ip -v)
 	done
+        sleep 1
 }
 
 main() {
 	local opt
-	vm_name="coco-lab"
+        vm_image="${1:-centos8stream}"
+	vm_name="${2:-coco-lab}"
 
 	while getopts "h" opt; do
 		case "$opt" in
@@ -63,28 +65,32 @@ main() {
 		kcli delete -y vm ${vm_name}
 	fi
 
-	info "Create and start the VM"
-	kcli create vm -i centos8stream -P numcpus=4 -P memory=$((1024*8)) -P disks=[30] "${vm_name}"
+	info "Create and start the ${vm_name} Centos8 VM"
+	kcli create vm -i ${vm_image} -P numcpus=4 -P memory=8G -P disks=[30] "${vm_name}"
 	kcli start vm "${vm_name}"
 
-	info "Wait the VM to get an IP address"
+	info "Wait for the VM to get an IP address"
 	local ip
 	wait_for_ip
 	user=$(kcli info vm "${vm_name}" -f user -v)
 
+	if ! kcli ssh "${user}"@"${vm_name}" "echo OK" ; then
+		user=root
+		kcli ssh "${user}"@"${vm_name}" "echo OK"
+	fi
+
 	info "Install software requirements"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core'"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c 'ansible-galaxy collection install community.docker'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c 'sudo dnf -y update && sudo dnf install -y git ansible-core' || bash -c 'sudo apt update && sudo apt install -y git ansible'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c 'ansible-galaxy collection install community.docker'"
 
 	info "Setup the lab environment"
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 		-r "${script_dir}/setup_lab_env.sh" "${user}@${ip}:~/setup_lab_env.sh"
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-		"${user}"@"${ip}" "bash -c './setup_lab_env.sh'"
+	kcli ssh "${user}"@"${vm_name}" "bash -c './setup_lab_env.sh'"
 
-	info "Installation succeeded. Use the 'kcli ssh ${vm_name}' command to connect to the VM"
+	info "Installation of VM ${vm_name} succeeded."
+        info "Use the following commmand to connect to the VM:"
+        echo "     kcli ssh ${vm_name}"
 }
 
 main "$@"
