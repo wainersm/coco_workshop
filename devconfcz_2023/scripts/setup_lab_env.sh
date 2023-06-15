@@ -32,7 +32,14 @@ main() {
 	pushd operator/tests/e2e
 	git checkout bba3c4343d5399f1c -b lab_setup
 	info "install and configure the environment"
-	ansible-playbook -i localhost, -c local --tags untagged ansible/main.yml
+	info "  Install builds dependencies"
+	ansible-playbook -i localhost, -c local --tags untagged ansible/install_build_deps.yml
+        info "  Install and configure containerd"
+        ansible-playbook -i localhost, -c local --tags untagged ansible/install_containerd.yml
+        info "  Install and configure kubeadm"
+        ansible-playbook -i localhost, -c local --tags untagged ansible/install_kubeadm.yml
+        info "  Install test dependencies"
+        ansible-playbook -i localhost, -c local --tags untagged ansible/install_test_deps.yml
 	info "start kubernetes"
 	sudo -E PATH="$PATH" bash -c './cluster/up.sh'
 	popd
