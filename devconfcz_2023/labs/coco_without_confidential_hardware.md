@@ -44,7 +44,7 @@ You will install CoCo via [Kubernetes operator](https://kubernetes.io/docs/conce
 $ kubectl label node "$(hostname)" "node-role.kubernetes.io/worker="
 ```
 
-2. Disable SELinux enforce mode:
+2. Disable SELinux enforce mode (not necessary on Ubuntu):
 
 ```shell
 $ sudo setenforce 0
